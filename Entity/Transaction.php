@@ -40,7 +40,7 @@ abstract class Transaction
     #[ORM\Column(type: "decimal", precision: 6, scale: 2, options: ["default" => 0])]
     protected float $amount = 0.0;
 
-    #[ORM\Column(type: "array")]
+    #[ORM\Column(type: "json")]
     protected array $response = [];
 
     public function __construct($amount = null)
