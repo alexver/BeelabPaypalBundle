@@ -41,7 +41,7 @@ abstract class Transaction
     protected float $amount = 0.0;
 
     #[ORM\Column(type: "text", name:"response")]
-    protected string $responseText;
+    protected string $responseText = '';
 
     #[ORM\Column(type: "json", name:"responseJson")]
     protected array $response = [];
@@ -132,7 +132,7 @@ abstract class Transaction
         if (self::STATUS_OK !== $this->status) {
             $this->status = self::STATUS_OK;
             $this->end = new \DateTime();
-            $this->response = $response;
+            $this->response = $response??[];
         }
     }
 
@@ -146,7 +146,7 @@ abstract class Transaction
     {
         $this->status = self::STATUS_ERROR;
         $this->end = new \DateTime();
-        $this->response = $response;
+        $this->response = $response??[];
     }
 
     public function isOk(): bool
