@@ -23,19 +23,19 @@ abstract class Transaction
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
-    protected int $id;
+    protected int $id = 0;
 
     #[ORM\Column(type: "datetime")]
-    protected DateTime $start;
+    protected ?DateTime $start;
 
     #[ORM\Column(type: "datetime", nullable: true)]
-    protected DateTime $end;
+    protected ?DateTime $end = null;
 
     #[ORM\Column(type: "smallint", options: ["default" => 0])]
     protected int $status = self::STATUS_STARTED;
 
     #[ORM\Column(type: "string", unique: true)]
-    protected string $token;
+    protected string $token = '';
 
     #[ORM\Column(type: "decimal", precision: 6, scale: 2, options: ["default" => 0])]
     protected float $amount = 0.0;
