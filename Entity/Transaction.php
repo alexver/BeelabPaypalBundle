@@ -40,7 +40,10 @@ abstract class Transaction
     #[ORM\Column(type: "decimal", precision: 6, scale: 2, options: ["default" => 0])]
     protected float $amount = 0.0;
 
-    #[ORM\Column(type: "json")]
+    #[ORM\Column(type: "text", name:"response")]
+    protected string $responseText;
+
+    #[ORM\Column(type: "json", name:"responseJson")]
     protected array $response = [];
 
     public function __construct($amount = null)
@@ -114,7 +117,14 @@ abstract class Transaction
 
     public function getResponse(): ?array
     {
-        return $this->response;
+        $result = $this->response;
+        if (empty($result) && $this->responseText != '') {
+          if (false === $result = @unserialize($this->responseText)) {
+            return [];
+          }
+        }
+
+        return $result;
     }
 
     public function complete(array $response): void
