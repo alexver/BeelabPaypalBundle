@@ -12,36 +12,16 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class Service
 {
-    /**
-     * @var Transaction
-     */
-    protected $transaction;
+    protected Transaction $transaction;
 
-    /**
-     * @var Gateway
-     */
-    private $gateway;
+    private Gateway $gateway;
 
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private RouterInterface $router;
 
-    /**
-     * @var array
-     */
-    private $config;
+    private array $config = [];
 
-    /**
-     * @var array
-     */
-    private $params;
+    private array $params = [];
 
-    /**
-     * @param Gateway         $gateway
-     * @param RouterInterface $router
-     * @param array           $config
-     */
     public function __construct(Gateway $gateway, RouterInterface $router, array $config)
     {
         $gateway

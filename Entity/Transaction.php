@@ -2,13 +2,10 @@
 
 namespace Beelab\PaypalBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Transaction.
- *
- * @ORM\MappedSuperclass
- */
+#[ORM\MappedSuperclass]
 abstract class Transaction
 {
     const STATUS_KO = -1;
@@ -23,56 +20,31 @@ abstract class Transaction
         self::STATUS_ERROR => 'failed',
     ];
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: "integer")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    protected int $id = 0;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     */
-    protected $start;
+    #[ORM\Column(type: "datetime")]
+    protected ?DateTime $start;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $end;
+    #[ORM\Column(type: "datetime", nullable: true)]
+    protected ?DateTime $end = null;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="smallint", options={"default": 0})
-     */
-    protected $status = self::STATUS_STARTED;
+    #[ORM\Column(type: "smallint", options: ["default" => 0])]
+    protected int $status = self::STATUS_STARTED;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(unique=true)
-     */
-    protected $token;
+    #[ORM\Column(type: "string", unique: true)]
+    protected string $token = '';
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="decimal", precision=6, scale=2, options={"default": 0})
-     */
-    protected $amount = 0;
+    #[ORM\Column(type: "decimal", precision: 6, scale: 2, options: ["default" => 0])]
+    protected float $amount = 0.0;
 
-    /**
-     * @var array
-     *
-     * @ORM\Column(type="array")
-     */
-    protected $response;
+    #[ORM\Column(type: "text", name:"response")]
+    protected string $responseText = '';
+
+    #[ORM\Column(type: "json", name:"responseJson")]
+    protected array $response = [];
 
     public function __construct($amount = null)
     {
@@ -145,7 +117,14 @@ abstract class Transaction
 
     public function getResponse(): ?array
     {
-        return $this->response;
+        $result = $this->response;
+        if (empty($result) && $this->responseText != '') {
+          if (false === $result = @unserialize($this->responseText)) {
+            return [];
+          }
+        }
+
+        return $result;
     }
 
     public function complete(array $response): void
@@ -153,7 +132,7 @@ abstract class Transaction
         if (self::STATUS_OK !== $this->status) {
             $this->status = self::STATUS_OK;
             $this->end = new \DateTime();
-            $this->response = $response;
+            $this->response = $response??[];
         }
     }
 
@@ -167,7 +146,7 @@ abstract class Transaction
     {
         $this->status = self::STATUS_ERROR;
         $this->end = new \DateTime();
-        $this->response = $response;
+        $this->response = $response??[];
     }
 
     public function isOk(): bool
