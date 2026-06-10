@@ -46,9 +46,9 @@ abstract class Transaction
     #[ORM\Column(type: "json", name:"responseJson")]
     protected array $response = [];
 
-    public function __construct($amount = null)
+    public function __construct(?float $amount = null)
     {
-        $this->amount = $amount;
+        $this->amount = $amount ?? 0.0;
         $this->start = new \DateTime();
     }
 
@@ -124,7 +124,7 @@ abstract class Transaction
           }
         }
 
-        return $result;
+        return empty($result) ? null : $result;
     }
 
     public function complete(array $response): void

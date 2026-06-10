@@ -78,14 +78,14 @@ class Service
      */
     public function start()
     {
-        if (null === $this->transaction) {
+        if (!isset($this->transaction)) {
             throw new RuntimeException('Transaction not defined. Call setTransaction() first.');
         }
         $items = $this->transaction->getItems();
         $purchase = $this->gateway->purchase($this->params);
         $response = !empty($items) ? $purchase->setItems($items)->send() : $purchase->send();
         if (!$response->isRedirect()) {
-            throw new Exception($response->getMessage());
+            throw new Exception((string) $response->getMessage());
         }
         $this->transaction->setToken($response->getTransactionReference());
 
@@ -97,7 +97,7 @@ class Service
      */
     public function complete(): void
     {
-        if (null === $this->transaction) {
+        if (!isset($this->transaction)) {
             throw new RuntimeException('Transaction not defined. Call setTransaction() first.');
         }
         $items = $this->transaction->getItems();

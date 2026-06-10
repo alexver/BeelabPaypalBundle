@@ -225,8 +225,9 @@ class ServiceTest extends TestCase
 
     private function getRequestMock()
     {
-        $methods = ['setItems', 'initialize', 'getParameters', 'getResponse', 'send', 'sendData', 'getData'];
-
-        return $this->getMockBuilder('Omnipay\Common\Message\RequestInterface')->setMethods($methods)->getMock();
+        return $this->getMockBuilder('Omnipay\PayPal\Message\ExpressAuthorizeRequest')
+            ->disableOriginalConstructor()
+            ->onlyMethods(['setItems', 'send'])
+            ->getMock();
     }
 }
