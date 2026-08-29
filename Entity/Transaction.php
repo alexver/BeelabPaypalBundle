@@ -38,7 +38,7 @@ abstract class Transaction
     protected string $token = '';
 
     #[ORM\Column(type: "decimal", precision: 6, scale: 2, options: ["default" => 0])]
-    protected float $amount = 0.0;
+    protected string $amount = '0.00';
 
     #[ORM\Column(type: "text", name:"response")]
     protected string $responseText = '';
@@ -46,9 +46,9 @@ abstract class Transaction
     #[ORM\Column(type: "json", name:"responseJson")]
     protected array $response = [];
 
-    public function __construct(?float $amount = null)
+    public function __construct(?string $amount = null)
     {
-        $this->amount = $amount ?? 0.0;
+        $this->amount = $amount ?? '0.00';
         $this->start = new \DateTime();
     }
 
