@@ -34,7 +34,7 @@ The bundle has three moving parts that fit together at runtime:
 ## Testing notes
 
 - PHPUnit bootstrap is `Tests/bootstrap.php` (just loads Composer autoload). Test files end in `Test.php` under `Tests/`.
-- The `Test/` directory (singular, shipped with the bundle) provides reusable stubs for **consumers' own test suites**: `PaypalServiceStub` overrides `start()`/`complete()` to avoid real PayPal calls, and `TransactionStub` provides a concrete transaction with sample items. Do not confuse `Test/` (shipped helpers) with `Tests/` (this bundle's own tests).
+- The `Test/` directory (singular, shipped with the bundle) provides a reusable stub for **consumers' own test suites**: `TransactionStub` provides a concrete transaction with sample items. Do not confuse `Test/` (shipped helpers) with `Tests/` (this bundle's own tests).
 
 ## Conventions
 
